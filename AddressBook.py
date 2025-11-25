@@ -13,6 +13,8 @@ def input_error(func):
             return "Enter the argument for the command."
         except NameError:
             return "Contact not found."
+        except AttributeError:
+            return "Contact not found."
     return inner
 
 class Field:
@@ -154,8 +156,7 @@ def change_contact(args, book):
 
     name, phone, new_p = args
     record = book.find(name)
-    if not record:
-        return f"Contact not found."
+    
     record.edit_phone(phone, new_p)
     return "Contact updated."
 
@@ -164,8 +165,7 @@ def change_contact(args, book):
 def show_phones(args, book):
     name = args[0]
     record = book.find(name)
-    if not record:
-        return "Contact not found."
+    
     return "; ".join(p.value for p in record.phones)
 
 
@@ -173,8 +173,7 @@ def show_phones(args, book):
 def add_birthday(args, book):
     name, birthday = args
     record = book.find(name)
-    if not record:
-        return "Contact not found."
+    
     record.add_birthday(birthday)
     return "Birthday added."
 
@@ -183,8 +182,7 @@ def add_birthday(args, book):
 def show_birthday(args, book):
     name = args[0]
     record = book.find(name)
-    if not record:
-        return "Contact not found."
+    
     if not record.birthday:
         return "Birthday not set."
     return record.birthday.value
@@ -195,7 +193,7 @@ def birthdays(args, book):
     upcoming = book.get_upcoming_birthdays()
     if not upcoming:
         return "No birthdays in the next 7 days."
-    lines = [f"{item['name']}: {item['birthday']}" for item in upcoming]
+    lines = [f"{item['name']}: {item['congratulation_date']}" for item in upcoming]
     return "\n".join(lines)
 
 
