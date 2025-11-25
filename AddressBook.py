@@ -79,8 +79,9 @@ class Record:
         p = self.find_phone(phone)
         if not p:
             raise ValueError("Old phone number not found")
-        new_p = Phone(new_p)
-        return new_p
+        self.phones.remove(p)
+        self.add_phone(new_p)
+        return True
 
         
 
@@ -148,12 +149,15 @@ def add_contact(args, book):
 
 @input_error
 def change_contact(args, book):
-    name, old_phone, new_phone = args
+    if len(args) != 3:
+        return f'Error: You must enter a name, old number and new number.'
+
+    name, phone, new_p = args
     record = book.find(name)
     if not record:
-        return "Contact not found."
-    record.edit_phone(old_phone, new_phone)
-    return "Phone number updated."
+        return f"Contact not found."
+    record.edit_phone(phone, new_p)
+    return "Contact updated."
 
 
 @input_error
